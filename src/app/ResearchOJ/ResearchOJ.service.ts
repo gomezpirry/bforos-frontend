@@ -12,43 +12,41 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { DataService } from '../data.service';
-import { Observable } from 'rxjs/Observable';
-import { ResearchOJ } from '../org.bforos';
-import 'rxjs/Rx';
+import {Injectable} from '@angular/core';
+import {DataService} from '../data.service';
+import {Observable} from 'rxjs';
+import {ResearchOJ} from '../org.bforos';
+// import 'rxjs/Rx';
 
 // Can be injected into a constructor
 @Injectable()
 export class ResearchOJService {
 
-	
-		private NAMESPACE: string = 'ResearchOJ';
-	
+
+	private NAMESPACE = 'ResearchOJ';
 
 
+	constructor(private dataService: DataService<ResearchOJ>) {
+	};
 
-    constructor(private dataService: DataService<ResearchOJ>) {
-    };
+	public getAll(): Observable<ResearchOJ[]> {
+		return this.dataService.getAll(this.NAMESPACE);
+	}
 
-    public getAll(): Observable<ResearchOJ[]> {
-        return this.dataService.getAll(this.NAMESPACE);
-    }
+	public getAsset(id: any): Observable<ResearchOJ> {
+		return this.dataService.getSingle(this.NAMESPACE, id);
+	}
 
-    public getAsset(id: any): Observable<ResearchOJ> {
-      return this.dataService.getSingle(this.NAMESPACE, id);
-    }
+	public addAsset(itemToAdd: any): Observable<ResearchOJ> {
+		return this.dataService.add(this.NAMESPACE, itemToAdd);
+	}
 
-    public addAsset(itemToAdd: any): Observable<ResearchOJ> {
-      return this.dataService.add(this.NAMESPACE, itemToAdd);
-    }
+	public updateAsset(id: any, itemToUpdate: any): Observable<ResearchOJ> {
+		return this.dataService.update(this.NAMESPACE, id, itemToUpdate);
+	}
 
-    public updateAsset(id: any, itemToUpdate: any): Observable<ResearchOJ> {
-      return this.dataService.update(this.NAMESPACE, id, itemToUpdate);
-    }
-
-    public deleteAsset(id: any): Observable<ResearchOJ> {
-      return this.dataService.delete(this.NAMESPACE, id);
-    }
+	public deleteAsset(id: any): Observable<ResearchOJ> {
+		return this.dataService.delete(this.NAMESPACE, id);
+	}
 
 }

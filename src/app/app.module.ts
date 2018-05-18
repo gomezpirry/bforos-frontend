@@ -12,56 +12,58 @@
  * limitations under the License.
  */
 
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AppRoutingModule } from './app-routing.module';
-import { DataService }     from './data.service';
-import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {AppRoutingModule} from './app-routing.module';
+import {DataService} from './data.service';
+import {AppComponent} from './app.component';
+import {HomeComponent} from './home/home.component';
+import {ResearchOJComponent} from './ResearchOJ/ResearchOJ.component';
+
+
+import {ResearcherComponent} from './Researcher/Researcher.component';
+import {InstitutionComponent} from './Institution/Institution.component';
+
+
+import {ClaimComponent} from './Claim/Claim.component';
+import {CollectComponent} from './Collect/Collect.component';
+import {EnrichComponent} from './Enrich/Enrich.component';
+import {HttpClientModule} from '@angular/common/http';
+
 // import { TransactionComponent } from './Transaction/Transaction.component'
 
-import { ResearchOJComponent } from './ResearchOJ/ResearchOJ.component';
-
-
-  import { ResearcherComponent } from './Researcher/Researcher.component';
-  import { InstitutionComponent } from './Institution/Institution.component';
-
-
-  import { ClaimComponent } from './Claim/Claim.component';
-  import { CollectComponent } from './Collect/Collect.component';
-  import { EnrichComponent } from './Enrich/Enrich.component';
 @NgModule({
-  declarations: [
-    AppComponent,
+	declarations: [
+		AppComponent,
 		HomeComponent,
-    // TransactionComponent,
-    
-    ResearchOJComponent
-    ,
+		// TransactionComponent,
 
-    ResearcherComponent,
-      
-      InstitutionComponent
-      ,
+		ResearchOJComponent
+		,
 
-    ClaimComponent,
-        CollectComponent,
-        
-        EnrichComponent
-        
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpModule,
-    AppRoutingModule
-  ],
-  providers: [
-    DataService
-  ],
-  bootstrap: [AppComponent]
+		ResearcherComponent,
+
+		InstitutionComponent
+		,
+
+		ClaimComponent,
+		CollectComponent,
+
+		EnrichComponent
+
+	],
+	imports: [
+		BrowserModule,
+		FormsModule,
+		ReactiveFormsModule,
+		HttpClientModule,
+		AppRoutingModule
+	],
+	providers: [
+		DataService
+	],
+	bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

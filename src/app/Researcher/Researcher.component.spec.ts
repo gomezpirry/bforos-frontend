@@ -12,42 +12,40 @@
  * limitations under the License.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Configuration } from '../configuration';
-import { DataService } from '../data.service';
-import { ResearcherComponent } from './Researcher.component';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {BrowserModule} from '@angular/platform-browser';
+import {HttpModule} from '@angular/http';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {Configuration} from '../configuration';
+import {DataService} from '../data.service';
+import {ResearcherComponent} from './Researcher.component';
 import {ResearcherService} from './Researcher.service';
+
 describe('ResearcherComponent', () => {
-  let component: ResearcherComponent;
-  let fixture: ComponentFixture<ResearcherComponent>;
+	let component: ResearcherComponent;
+	let fixture: ComponentFixture<ResearcherComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ResearcherComponent ],
-imports: [
-    BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpModule
-  ],
-providers: [ResearcherService,DataService,Configuration]
-    })
-    .compileComponents();
-  }));
+	beforeEach(async(() => {
+		TestBed.configureTestingModule({
+			declarations: [ResearcherComponent],
+			imports: [
+				BrowserModule,
+				FormsModule,
+				ReactiveFormsModule,
+				HttpModule
+			],
+			providers: [ResearcherService, DataService, Configuration]
+		})
+			.compileComponents();
+	}));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ResearcherComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+	beforeEach(() => {
+		fixture = TestBed.createComponent(ResearcherComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });

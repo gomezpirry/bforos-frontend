@@ -12,44 +12,42 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { DataService } from '../data.service';
-import { Observable } from 'rxjs/Observable';
-import { Collect } from '../org.bforos';
-import 'rxjs/Rx';
+import {Injectable} from '@angular/core';
+import {DataService} from '../data.service';
+import {Observable} from 'rxjs';
+import {Collect} from '../org.bforos';
+// import 'rxjs/Rx';
 
 // Can be injected into a constructor
 @Injectable()
 export class CollectService {
 
-	
-		private NAMESPACE: string = 'Collect';
-	
+
+	private NAMESPACE: string = 'Collect';
 
 
+	constructor(private dataService: DataService<Collect>) {
+	};
 
-    constructor(private dataService: DataService<Collect>) {
-    };
+	public getAll(): Observable<Collect[]> {
+		return this.dataService.getAll(this.NAMESPACE);
+	}
 
-    public getAll(): Observable<Collect[]> {
-        return this.dataService.getAll(this.NAMESPACE);
-    }
+	public getTransaction(id: any): Observable<Collect> {
+		return this.dataService.getSingle(this.NAMESPACE, id);
+	}
 
-    public getTransaction(id: any): Observable<Collect> {
-      return this.dataService.getSingle(this.NAMESPACE, id);
-    }
+	public addTransaction(itemToAdd: any): Observable<Collect> {
+		return this.dataService.add(this.NAMESPACE, itemToAdd);
+	}
 
-    public addTransaction(itemToAdd: any): Observable<Collect> {
-      return this.dataService.add(this.NAMESPACE, itemToAdd);
-    }
+	public updateTransaction(id: any, itemToUpdate: any): Observable<Collect> {
+		return this.dataService.update(this.NAMESPACE, id, itemToUpdate);
+	}
 
-    public updateTransaction(id: any, itemToUpdate: any): Observable<Collect> {
-      return this.dataService.update(this.NAMESPACE, id, itemToUpdate);
-    }
-
-    public deleteTransaction(id: any): Observable<Collect> {
-      return this.dataService.delete(this.NAMESPACE, id);
-    }
+	public deleteTransaction(id: any): Observable<Collect> {
+		return this.dataService.delete(this.NAMESPACE, id);
+	}
 
 }
 

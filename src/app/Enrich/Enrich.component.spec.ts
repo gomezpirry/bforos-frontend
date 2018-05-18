@@ -12,43 +12,41 @@
  * limitations under the License.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Configuration } from '../configuration';
-import { DataService } from '../data.service';
-import { EnrichComponent } from './Enrich.component';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {BrowserModule} from '@angular/platform-browser';
+import {HttpModule} from '@angular/http';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {Configuration} from '../configuration';
+import {DataService} from '../data.service';
+import {EnrichComponent} from './Enrich.component';
 import {EnrichService} from './Enrich.service';
+
 describe('EnrichComponent', () => {
-  let component: EnrichComponent;
-  let fixture: ComponentFixture<EnrichComponent>;
+	let component: EnrichComponent;
+	let fixture: ComponentFixture<EnrichComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ EnrichComponent ],
-imports: [
-    BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpModule
-  ],
-providers: [EnrichService,DataService,Configuration]
-    })
-    .compileComponents();
-  }));
+	beforeEach(async(() => {
+		TestBed.configureTestingModule({
+			declarations: [EnrichComponent],
+			imports: [
+				BrowserModule,
+				FormsModule,
+				ReactiveFormsModule,
+				HttpModule
+			],
+			providers: [EnrichService, DataService, Configuration]
+		})
+			.compileComponents();
+	}));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(EnrichComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+	beforeEach(() => {
+		fixture = TestBed.createComponent(EnrichComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });
 

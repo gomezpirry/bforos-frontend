@@ -12,43 +12,41 @@
  * limitations under the License.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Configuration } from '../configuration';
-import { DataService } from '../data.service';
-import { ClaimComponent } from './Claim.component';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {BrowserModule} from '@angular/platform-browser';
+import {HttpModule} from '@angular/http';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {Configuration} from '../configuration';
+import {DataService} from '../data.service';
+import {ClaimComponent} from './Claim.component';
 import {ClaimService} from './Claim.service';
+
 describe('ClaimComponent', () => {
-  let component: ClaimComponent;
-  let fixture: ComponentFixture<ClaimComponent>;
+	let component: ClaimComponent;
+	let fixture: ComponentFixture<ClaimComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ClaimComponent ],
-imports: [
-    BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpModule
-  ],
-providers: [ClaimService,DataService,Configuration]
-    })
-    .compileComponents();
-  }));
+	beforeEach(async(() => {
+		TestBed.configureTestingModule({
+			declarations: [ClaimComponent],
+			imports: [
+				BrowserModule,
+				FormsModule,
+				ReactiveFormsModule,
+				HttpModule
+			],
+			providers: [ClaimService, DataService, Configuration]
+		})
+			.compileComponents();
+	}));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ClaimComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+	beforeEach(() => {
+		fixture = TestBed.createComponent(ClaimComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });
 
