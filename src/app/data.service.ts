@@ -43,7 +43,7 @@ export class DataService<Type> {
 	public getSingle(ns: string, id: string): Observable<Type> {
 		console.log('GetSingle ' + ns);
 
-		return this.httpClient.get(this.actionUrl + ns + '/' + id + this.resolveSuffix)
+		return this.httpClient.get(this.actionUrl + ns + '/' + id + this.resolveSuffix, { observe: 'response' })
 			.pipe(
 				map(this.extractData),
 				catchError(this.handleError)
@@ -55,7 +55,7 @@ export class DataService<Type> {
 		console.log('Add ' + ns);
 		console.log('asset', asset);
 
-		return this.httpClient.post(this.actionUrl + ns, asset)
+		return this.httpClient.post(this.actionUrl + ns, asset, { observe: 'response' })
 			.pipe(
 				map(this.extractData),
 				catchError(this.handleError)
@@ -67,7 +67,7 @@ export class DataService<Type> {
 		console.log('what is the id?', id);
 		console.log('what is the updated item?', itemToUpdate);
 		console.log('what is the updated item?', JSON.stringify(itemToUpdate));
-		return this.httpClient.put(`${this.actionUrl}${ns}/${id}`, itemToUpdate)
+		return this.httpClient.put(`${this.actionUrl}${ns}/${id}`, itemToUpdate, { observe: 'response' })
 			.pipe(
 				map(this.extractData),
 				catchError(this.handleError)
@@ -77,7 +77,7 @@ export class DataService<Type> {
 	public delete(ns: string, id: string): Observable<Type> {
 		console.log('Delete ' + ns);
 
-		return this.httpClient.delete(this.actionUrl + ns + '/' + id)
+		return this.httpClient.delete(this.actionUrl + ns + '/' + id, { observe: 'response' })
 			.pipe(
 				map(this.extractData),
 				catchError(this.handleError)
