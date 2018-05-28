@@ -15,7 +15,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ResearcherService} from './Researcher.service';
-// import 'rxjs/add/operator/toPromise';
+import {TdLoadingService} from '@covalent/core';
+import {CreateResearcherDialogComponent} from './create-researcher-dialog/create-researcher-dialog.component';
+import {MatDialog} from '@angular/material';
+import {UpdateResearcherDialogComponent} from './update-researcher-dialog/update-researcher-dialog.component';
+import {DeleteResearcherDialogComponent} from './delete-researcher-dialog/delete-researcher-dialog.component';
 
 @Component({
 	selector: 'app-researcher',
@@ -24,71 +28,43 @@ import {ResearcherService} from './Researcher.service';
 	providers: [ResearcherService]
 })
 export class ResearcherComponent implements OnInit {
-
-	myForm: FormGroup;
+	displayedColumns = ['email', 'firstName', 'lastNam', 'wallet', 'actions'];
 
 	private allParticipants;
-	private participant;
-	private currentId;
 	private errorMessage;
 
-
-	email = new FormControl('', Validators.required);
-
-
-	firstName = new FormControl('', Validators.required);
-
-
-	lastNam = new FormControl('', Validators.required);
-
-
-	wallet = new FormControl('', Validators.required);
-
-
-	constructor(private serviceResearcher: ResearcherService, fb: FormBuilder) {
-		this.myForm = fb.group({
-
-
-			email: this.email,
-
-
-			firstName: this.firstName,
-
-
-			lastNam: this.lastNam,
-
-
-			wallet: this.wallet
-
-
-		});
-	};
+	constructor(private serviceResearcher: ResearcherService,
+							private loadingService: TdLoadingService,
+							public fb: FormBuilder,
+							public createParticipantDialog: MatDialog,
+							public updateParticipantDialog: MatDialog,
+							public deleteParticipantDialog: MatDialog) { }
 
 	ngOnInit(): void {
 		this.loadAll();
 	}
 
-	loadAll(): Promise<any> {
-		let tempList = [];
-		return this.serviceResearcher.getAll()
-			.toPromise()
-			.then((result) => {
+	loadAll(): void {
+		this.registerLoading();
+		const tempList = [];
+		this.serviceResearcher.getAll().subscribe(
+			(result) => {
 				this.errorMessage = null;
 				result.forEach(participant => {
 					tempList.push(participant);
 				});
 				this.allParticipants = tempList;
-			})
-			.catch((error) => {
-				if (error == 'Server error') {
+				this.resolveLoading();
+			},
+			(error) => {
+				if (error === 'Server error') {
 					this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-				}
-				else if (error == '404 - Not Found') {
+				}	else if (error === '404 - Not Found') {
 					this.errorMessage = '404 - Could not find API route. Please check your available APIs.'
-				}
-				else {
+				}	else {
 					this.errorMessage = error;
 				}
+				this.resolveLoading();
 			});
 	}
 
@@ -117,224 +93,51 @@ export class ResearcherComponent implements OnInit {
 		return this[name].value.indexOf(value) !== -1;
 	}
 
-	addParticipant(form: any): Promise<any> {
-		this.participant = {
-			$class: 'org.bforos.Researcher',
-
-
-			'email': this.email.value,
-
-
-			'firstName': this.firstName.value,
-
-
-			'lastNam': this.lastNam.value,
-
-
-			'wallet': this.wallet.value
-
-
-		};
-
-		this.myForm.setValue({
-
-
-			'email': null,
-
-
-			'firstName': null,
-
-
-			'lastNam': null,
-
-
-			'wallet': null
-
-
-		});
-
-		return this.serviceResearcher.addParticipant(this.participant)
-			.toPromise()
-			.then(() => {
-				this.errorMessage = null;
-				this.myForm.setValue({
-
-
-					'email': null,
-
-
-					'firstName': null,
-
-
-					'lastNam': null,
-
-
-					'wallet': null
-
-
-				});
-			})
-			.catch((error) => {
-				if (error == 'Server error') {
-					this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-				}
-				else {
-					this.errorMessage = error;
-				}
-			});
-	}
-
-
-	updateParticipant(form: any): Promise<any> {
-		this.participant = {
-			$class: 'org.bforos.Researcher',
-
-
-			'firstName': this.firstName.value,
-
-
-			'lastNam': this.lastNam.value,
-
-
-			'wallet': this.wallet.value
-
-
-		};
-
-		return this.serviceResearcher.updateParticipant(form.get('email').value, this.participant)
-			.toPromise()
-			.then(() => {
-				this.errorMessage = null;
-			})
-			.catch((error) => {
-				if (error == 'Server error') {
-					this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-				}
-				else if (error == '404 - Not Found') {
-					this.errorMessage = '404 - Could not find API route. Please check your available APIs.'
-				}
-				else {
-					this.errorMessage = error;
-				}
-			});
-	}
-
-
-	deleteParticipant(): Promise<any> {
-
-		return this.serviceResearcher.deleteParticipant(this.currentId)
-			.toPromise()
-			.then(() => {
-				this.errorMessage = null;
-			})
-			.catch((error) => {
-				if (error == 'Server error') {
-					this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-				}
-				else if (error == '404 - Not Found') {
-					this.errorMessage = '404 - Could not find API route. Please check your available APIs.'
-				}
-				else {
-					this.errorMessage = error;
-				}
-			});
-	}
-
-	setId(id: any): void {
-		this.currentId = id;
-	}
-
-	getForm(id: any): Promise<any> {
-
-		return this.serviceResearcher.getparticipant(id)
-			.toPromise()
-			.then((result) => {
-				this.errorMessage = null;
-				let formObject = {
-
-
-					'email': null,
-
-
-					'firstName': null,
-
-
-					'lastNam': null,
-
-
-					'wallet': null
-
-
-				};
-
-
-				if (result.email) {
-
-					formObject.email = result.email;
-
-				} else {
-					formObject.email = null;
-				}
-
-				if (result.firstName) {
-
-					formObject.firstName = result.firstName;
-
-				} else {
-					formObject.firstName = null;
-				}
-
-				if (result.lastNam) {
-
-					formObject.lastNam = result.lastNam;
-
-				} else {
-					formObject.lastNam = null;
-				}
-
-				if (result.wallet) {
-
-					formObject.wallet = result.wallet;
-
-				} else {
-					formObject.wallet = null;
-				}
-
-
-				this.myForm.setValue(formObject);
-
-			})
-			.catch((error) => {
-				if (error == 'Server error') {
-					this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-				}
-				else if (error == '404 - Not Found') {
-					this.errorMessage = '404 - Could not find API route. Please check your available APIs.'
-				}
-				else {
-					this.errorMessage = error;
-				}
-			});
-
-	}
-
-	resetForm(): void {
-		this.myForm.setValue({
-
-
-			'email': null,
-
-
-			'firstName': null,
-
-
-			'lastNam': null,
-
-
-			'wallet': null
-
-
+	openCreateParticipantDialog(): void {
+		const dialogRef = this.createParticipantDialog.open(CreateResearcherDialogComponent);
+
+		dialogRef.afterClosed().subscribe(result => {
+			if (result && result.update) {
+				this.loadAll();
+			}
+		}, error => {
+			console.error(error);
 		});
 	}
 
+	openUpdateParticipantDialog(id: any): void {
+		const dialogRef = this.updateParticipantDialog.open(UpdateResearcherDialogComponent, {
+			data: { id: id }
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			if (result && result.update) {
+				this.loadAll();
+			}
+		}, error => {
+			console.error(error);
+		});
+	}
+
+	openDeleteParticipantDialog(id: any): void {
+		const dialogRef = this.deleteParticipantDialog.open(DeleteResearcherDialogComponent, {
+			data: { id: id }
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			if (result && result.update) {
+				this.loadAll();
+			}
+		}, error => {
+			console.error(error);
+		});
+	}
+
+	registerLoading(): void {
+		this.loadingService.register('getParticipants');
+	}
+
+	resolveLoading(): void {
+		this.loadingService.resolve('getParticipants');
+	}
 }

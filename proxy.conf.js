@@ -13,37 +13,39 @@
  */
 
 function getTarget() {
-    if (process.env.REST_SERVER_URLS) {
-        const restServerURLs = JSON.parse(process.env.REST_SERVER_URLS);
-        const restServerURL = restServerURLs['bforos-bnav1'];
-        if (restServerURL) {
-            return restServerURL;
-        }
-    }
-    if (process.env.REST_SERVER_URL) {
-        const restServerURL = process.env.REST_SERVER_URL;
-        return restServerURL;
-    }
-    return 'http://localhost:3000';
+	if (process.env.REST_SERVER_URLS) {
+		const restServerURLs = JSON.parse(process.env.REST_SERVER_URLS);
+		const restServerURL = restServerURLs['bforos-bnav1'];
+		if (restServerURL) {
+			return restServerURL;
+		}
+	}
+	if (process.env.REST_SERVER_URL) {
+		const restServerURL = process.env.REST_SERVER_URL;
+		return restServerURL;
+	}
+	return 'http://localhost:3000';
 }
 
 const target = getTarget();
 
 module.exports = [{
-    context: ['/auth', '/api'],
-    target,
-    secure: true,
-    changeOrigin: true
+	context: ['/auth', '/api'],
+	target: target,
+	secure: true,
+	changeOrigin: true
 }, {
-    context: '/',
-    target,
-    secure: true,
-    changeOrigin: true,
-    ws: true,
-    bypass: function (req, res, proxyOptions) {
-        const accept = req.headers.accept || '';
-        if (accept.indexOf('html') !== -1) {
-            return '/index.html';
-        }
-    }
+	context: '/',
+	target: target,
+	secure: true,
+	changeOrigin: true,
+	// ws: true,
+	bypass: function (req, res, proxyOptions) {
+		const accept = req.headers.accept || '';
+		if (accept.indexOf('html') !== -1) {
+			console.log('Skipping proxy for browser request');
+			return '/index.html';
+		}
+		req.headers['X-Custom-Header'] = 'yes';
+	}
 }];

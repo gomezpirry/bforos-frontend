@@ -14,6 +14,7 @@
 
 import {AfterViewInit, Component} from '@angular/core';
 import $ from 'jquery';
+import {TdMediaService} from '@covalent/core';
 
 @Component({
 	selector: 'app-root',
@@ -22,23 +23,72 @@ import $ from 'jquery';
 })
 export class AppComponent implements AfterViewInit{
 	title = 'app works!';
+	name = 'Bforos';
+
+	routes = [
+		{
+			title: 'Assets',
+			list: [
+				{
+					displayName: 'Research Objects',
+					name: '/ResearchOJ'
+				}
+			]
+		},
+		{
+			title: 'Participants',
+			list: [
+				{
+					displayName: 'Researchers',
+					name: '/Researcher'
+				},
+				{
+					displayName: 'Institutions',
+					name: '/Institution'
+				}
+			]
+		},
+		{
+			title: 'Transactions',
+			list: [
+				{
+					displayName: 'Claim',
+					name: '/Claim'
+				},
+				{
+					displayName: 'Collect',
+					name: '/Collect'
+				},
+				{
+					displayName: 'Enrich',
+					name: '/Enrich'
+				}
+			]
+		}
+	];
+
+	assetRoutes = this.routes[0].list;
+	participantRoutes = this.routes[1].list;
+	transactionRoutes = this.routes[2].list;
+
+	constructor(public mediaService: TdMediaService) {}
 
 	ngAfterViewInit() {
-		$('.nav a').on('click', function () {
-			$('.nav').find('.active').removeClass('active');
-			$(this).parent().addClass('active');
-		});
-
-		$('.dropdown').on('show.bs.dropdown', function (e) {
-			$(this).find('.dropdown-menu').first().stop(true, true).slideDown(300);
-		});
-
-		$('.dropdown').on('hide.bs.dropdown', function (e) {
-			$(this).find('.dropdown-menu').first().stop(true, true).slideUp(200);
-		});
-
-		$('.dropdown-menu li').on('click', function () {
-			$(this).parent().parent().addClass('active');
-		});
+		// $('.nav a').on('click', function () {
+		// 	$('.nav').find('.active').removeClass('active');
+		// 	$(this).parent().addClass('active');
+		// });
+		//
+		// $('.dropdown').on('show.bs.dropdown', function (e) {
+		// 	$(this).find('.dropdown-menu').first().stop(true, true).slideDown(300);
+		// });
+		//
+		// $('.dropdown').on('hide.bs.dropdown', function (e) {
+		// 	$(this).find('.dropdown-menu').first().stop(true, true).slideUp(200);
+		// });
+		//
+		// $('.dropdown-menu li').on('click', function () {
+		// 	$(this).parent().parent().addClass('active');
+		// });
 	}
 }

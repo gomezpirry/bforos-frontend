@@ -15,6 +15,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ResearchOJService} from './ResearchOJ.service';
+import {MatDialog} from '@angular/material';
+import {CreateResearchOJDialogComponent} from './create-research-oj-dialog/create-research-oj-dialog.component';
+import {TdLoadingService} from '@covalent/core';
+import {UpdateResearchOJDialogComponent} from './update-research-oj-dialog/update-research-oj-dialog.component';
+import {DeleteResearchOJDialogComponent} from './delete-research-oj-dialog/delete-research-oj-dialog.component';
 // import 'rxjs/add/operator/toPromise';
 
 @Component({
@@ -24,89 +29,42 @@ import {ResearchOJService} from './ResearchOJ.service';
 	providers: [ResearchOJService]
 })
 export class ResearchOJComponent implements OnInit {
-
-	myForm: FormGroup;
+	displayedColumns = ['roid', 'typero', 'address', 'reward', 'cost', 'owner', 'contributor', 'actions'];
 
 	private allAssets;
-	private asset;
-	private currentId;
 	private errorMessage;
 
-
-	ROId = new FormControl('', Validators.required);
-
-
-	typero = new FormControl('', Validators.required);
-
-
-	address = new FormControl('', Validators.required);
-
-
-	reward = new FormControl('', Validators.required);
-
-
-	cost = new FormControl('', Validators.required);
-
-
-	owner = new FormControl('', Validators.required);
-
-
-	contributor = new FormControl('', Validators.required);
-
-
-	constructor(private serviceResearchOJ: ResearchOJService, fb: FormBuilder) {
-		this.myForm = fb.group({
-
-
-			ROId: this.ROId,
-
-
-			typero: this.typero,
-
-
-			address: this.address,
-
-
-			reward: this.reward,
-
-
-			cost: this.cost,
-
-
-			owner: this.owner,
-
-
-			contributor: this.contributor
-
-
-		});
-	};
+	constructor(private serviceResearchOJ: ResearchOJService,
+							private loadingService: TdLoadingService,
+							public createAssetDialog: MatDialog,
+							public updateAssetDialog: MatDialog,
+							public deleteAssetDialog: MatDialog) { }
 
 	ngOnInit(): void {
 		this.loadAll();
 	}
 
-	loadAll(): Promise<any> {
-		let tempList = [];
-		return this.serviceResearchOJ.getAll()
-			.toPromise()
-			.then((result) => {
+	loadAll(): void {
+		this.registerLoading();
+		const tempList = [];
+		this.serviceResearchOJ.getAll().subscribe(
+			(result) => {
 				this.errorMessage = null;
 				result.forEach(asset => {
 					tempList.push(asset);
 				});
 				this.allAssets = tempList;
-			})
-			.catch((error) => {
-				if (error == 'Server error') {
+				this.resolveLoading();
+			},
+			(error) => {
+				if (error === 'Server error') {
 					this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-				}
-				else if (error == '404 - Not Found') {
+				} else if (error === '404 - Not Found') {
 					this.errorMessage = '404 - Could not find API route. Please check your available APIs.'
-				}
-				else {
+				}	else {
 					this.errorMessage = error;
 				}
+				this.resolveLoading();
 			});
 	}
 
@@ -135,302 +93,58 @@ export class ResearchOJComponent implements OnInit {
 		return this[name].value.indexOf(value) !== -1;
 	}
 
-	addAsset(form: any): Promise<any> {
-		this.asset = {
-			$class: 'org.bforos.ResearchOJ',
-
-
-			'ROId': this.ROId.value,
-
-
-			'typero': this.typero.value,
-
-
-			'address': this.address.value,
-
-
-			'reward': this.reward.value,
-
-
-			'cost': this.cost.value,
-
-
-			'owner': this.owner.value,
-
-
-			'contributor': this.contributor.value
-
-
-		};
-
-		this.myForm.setValue({
-
-
-			'ROId': null,
-
-
-			'typero': null,
-
-
-			'address': null,
-
-
-			'reward': null,
-
-
-			'cost': null,
-
-
-			'owner': null,
-
-
-			'contributor': null
-
-
-		});
-
-		return this.serviceResearchOJ.addAsset(this.asset)
-			.toPromise()
-			.then(() => {
-				this.errorMessage = null;
-				this.myForm.setValue({
-
-
-					'ROId': null,
-
-
-					'typero': null,
-
-
-					'address': null,
-
-
-					'reward': null,
-
-
-					'cost': null,
-
-
-					'owner': null,
-
-
-					'contributor': null
-
-
-				});
-			})
-			.catch((error) => {
-				if (error == 'Server error') {
-					this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-				}
-				else {
-					this.errorMessage = error;
-				}
-			});
-	}
-
-
-	updateAsset(form: any): Promise<any> {
-		this.asset = {
-			$class: 'org.bforos.ResearchOJ',
-
-
-			'typero': this.typero.value,
-
-
-			'address': this.address.value,
-
-
-			'reward': this.reward.value,
-
-
-			'cost': this.cost.value,
-
-
-			'owner': this.owner.value,
-
-
-			'contributor': this.contributor.value
-
-
-		};
-
-		return this.serviceResearchOJ.updateAsset(form.get('ROId').value, this.asset)
-			.toPromise()
-			.then(() => {
-				this.errorMessage = null;
-			})
-			.catch((error) => {
-				if (error == 'Server error') {
-					this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-				}
-				else if (error == '404 - Not Found') {
-					this.errorMessage = '404 - Could not find API route. Please check your available APIs.'
-				}
-				else {
-					this.errorMessage = error;
-				}
-			});
-	}
-
-
-	deleteAsset(): Promise<any> {
-
-		return this.serviceResearchOJ.deleteAsset(this.currentId)
-			.toPromise()
-			.then(() => {
-				this.errorMessage = null;
-			})
-			.catch((error) => {
-				if (error == 'Server error') {
-					this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-				}
-				else if (error == '404 - Not Found') {
-					this.errorMessage = '404 - Could not find API route. Please check your available APIs.'
-				}
-				else {
-					this.errorMessage = error;
-				}
-			});
-	}
-
-	setId(id: any): void {
-		this.currentId = id;
-	}
-
-	getForm(id: any): Promise<any> {
-
-		return this.serviceResearchOJ.getAsset(id)
-			.toPromise()
-			.then((result) => {
-				this.errorMessage = null;
-				let formObject = {
-
-
-					'ROId': null,
-
-
-					'typero': null,
-
-
-					'address': null,
-
-
-					'reward': null,
-
-
-					'cost': null,
-
-
-					'owner': null,
-
-
-					'contributor': null
-
-
-				};
-
-
-				if (result.ROId) {
-
-					formObject.ROId = result.ROId;
-
-				} else {
-					formObject.ROId = null;
-				}
-
-				if (result.typero) {
-
-					formObject.typero = result.typero;
-
-				} else {
-					formObject.typero = null;
-				}
-
-				if (result.address) {
-
-					formObject.address = result.address;
-
-				} else {
-					formObject.address = null;
-				}
-
-				if (result.reward) {
-
-					formObject.reward = result.reward;
-
-				} else {
-					formObject.reward = null;
-				}
-
-				if (result.cost) {
-
-					formObject.cost = result.cost;
-
-				} else {
-					formObject.cost = null;
-				}
-
-				if (result.owner) {
-
-					formObject.owner = result.owner;
-
-				} else {
-					formObject.owner = null;
-				}
-
-				if (result.contributor) {
-
-					formObject.contributor = result.contributor;
-
-				} else {
-					formObject.contributor = null;
-				}
-
-
-				this.myForm.setValue(formObject);
-
-			})
-			.catch((error) => {
-				if (error == 'Server error') {
-					this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-				}
-				else if (error == '404 - Not Found') {
-					this.errorMessage = '404 - Could not find API route. Please check your available APIs.'
-				}
-				else {
-					this.errorMessage = error;
-				}
-			});
-
-	}
-
-	resetForm(): void {
-		this.myForm.setValue({
-
-
-			'ROId': null,
-
-
-			'typero': null,
-
-
-			'address': null,
-
-
-			'reward': null,
-
-
-			'cost': null,
-
-
-			'owner': null,
-
-
-			'contributor': null
-
-
+	openCreateAssetDialog(): void {
+		const dialogRef = this.createAssetDialog.open(CreateResearchOJDialogComponent);
+
+		dialogRef.afterClosed().subscribe(result => {
+			if (result && result.update) {
+				this.loadAll();
+			}
+		}, error => {
+			console.error(error);
 		});
 	}
 
+	openUpdateAssetDialog(id: any): void {
+		const dialogRef = this.updateAssetDialog.open(UpdateResearchOJDialogComponent, {
+			data: { id: id }
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			if (result && result.update) {
+				this.loadAll();
+			}
+		}, error => {
+			console.error(error);
+		});
+	}
+
+	openDeleteAssetDialog(id: any): void {
+		const dialogRef = this.deleteAssetDialog.open(DeleteResearchOJDialogComponent, {
+			data: { id: id }
+		});
+
+		dialogRef.afterClosed().subscribe(result => {
+			if (result && result.update) {
+				this.loadAll();
+			}
+		}, error => {
+			console.error(error);
+		});
+	}
+
+	parseHyperledgerID(value: String): String {
+		if (value) {
+			value = value.split('#')[1];
+		}
+		return value;
+	}
+
+	registerLoading(): void {
+		this.loadingService.register('getAssets');
+	}
+
+	resolveLoading(): void {
+		this.loadingService.resolve('getAssets');
+	}
 }

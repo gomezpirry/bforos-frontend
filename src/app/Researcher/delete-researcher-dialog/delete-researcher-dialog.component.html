@@ -1,0 +1,19 @@
+<div *tdLoading="'delete'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'primary'">
+	<h2 mat-dialog-title>Delete Participant</h2>
+	<mat-dialog-content>
+		<div layout="column">
+			<div layout="column">
+				<div layout="row" *ngIf="errorMessage" class="alert alert-danger" role="alert">
+					<strong>Error:</strong> {{errorMessage}}
+				</div>
+			</div>
+			<div layout="row">
+				<h4>Are you sure you want to delete Participant with Email: <strong>{{id}}</strong>?</h4>
+			</div>
+		</div>
+	</mat-dialog-content>
+	<mat-dialog-actions layout="row" layout-align="center center">
+		<button mat-raised-button color="warn" (click)="closeDialog()">No</button>
+		<button mat-raised-button color="accent" (click)="deleteParticipant()">Yes</button>
+	</mat-dialog-actions>
+</div>

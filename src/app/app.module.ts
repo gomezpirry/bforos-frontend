@@ -21,15 +21,21 @@ import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
 import {ResearchOJComponent} from './ResearchOJ/ResearchOJ.component';
 
-
 import {ResearcherComponent} from './Researcher/Researcher.component';
 import {InstitutionComponent} from './Institution/Institution.component';
-
 
 import {ClaimComponent} from './Claim/Claim.component';
 import {CollectComponent} from './Collect/Collect.component';
 import {EnrichComponent} from './Enrich/Enrich.component';
 import {HttpClientModule} from '@angular/common/http';
+import {AngularMaterialModule} from './angular-material/angular-material.module';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { CreateResearchOJDialogComponent } from './ResearchOJ/create-research-oj-dialog/create-research-oj-dialog.component';
+import { UpdateResearchOJDialogComponent } from './ResearchOJ/update-research-oj-dialog/update-research-oj-dialog.component';
+import { DeleteResearchOJDialogComponent } from './ResearchOJ/delete-research-oj-dialog/delete-research-oj-dialog.component';
+import { CreateResearcherDialogComponent } from './Researcher/create-researcher-dialog/create-researcher-dialog.component';
+import { UpdateResearcherDialogComponent } from './Researcher/update-researcher-dialog/update-researcher-dialog.component';
+import { DeleteResearcherDialogComponent } from './Researcher/delete-researcher-dialog/delete-researcher-dialog.component';
 
 // import { TransactionComponent } from './Transaction/Transaction.component'
 
@@ -38,27 +44,35 @@ import {HttpClientModule} from '@angular/common/http';
 		AppComponent,
 		HomeComponent,
 		// TransactionComponent,
-
-		ResearchOJComponent
-		,
-
+		ResearchOJComponent,
 		ResearcherComponent,
-
-		InstitutionComponent
-		,
-
+		InstitutionComponent,
 		ClaimComponent,
 		CollectComponent,
-
-		EnrichComponent
-
+		EnrichComponent,
+		CreateResearchOJDialogComponent,
+		UpdateResearchOJDialogComponent,
+		DeleteResearchOJDialogComponent,
+		CreateResearcherDialogComponent,
+		UpdateResearcherDialogComponent,
+		DeleteResearcherDialogComponent
+	],
+	entryComponents: [
+		CreateResearchOJDialogComponent,
+		UpdateResearchOJDialogComponent,
+		DeleteResearchOJDialogComponent,
+		CreateResearcherDialogComponent,
+		UpdateResearcherDialogComponent,
+		DeleteResearcherDialogComponent
 	],
 	imports: [
 		BrowserModule,
+		BrowserAnimationsModule,
 		FormsModule,
 		ReactiveFormsModule,
 		HttpClientModule,
-		AppRoutingModule
+		AppRoutingModule,
+		AngularMaterialModule
 	],
 	providers: [
 		DataService

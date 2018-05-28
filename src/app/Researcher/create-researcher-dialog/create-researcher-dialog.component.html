@@ -1,0 +1,58 @@
+<div *tdLoading="'create'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'primary'">
+	<h2 mat-dialog-title>Create Participant</h2>
+	<mat-dialog-content>
+		<div layout="column">
+			<div layout="column">
+				<div layout="row" *ngIf="errorMessage" class="alert alert-danger" role="alert">
+					<strong>Error:</strong> {{errorMessage}}
+				</div>
+			</div>
+			<div layout="column">
+				<form layout="column" [formGroup]="myForm">
+					<mat-form-field layout="row">
+						<input flex matInput id="email" formControlName="email" type="email" placeholder="Email" required>
+						<mat-error *ngIf="email.invalid && (email.dirty || email.touched)">
+							<span *ngIf="email.errors.required">
+								Email is required.
+							</span>
+							<span *ngIf="email.errors.email">
+								Incorrect email pattern.
+							</span>
+						</mat-error>
+					</mat-form-field>
+					<mat-form-field layout="row">
+						<input flex matInput id="firstName" formControlName="firstName" type="text" placeholder="First Name" required>
+						<mat-error *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)">
+							<span *ngIf="firstName.errors.required">
+								First Name is required.
+							</span>
+						</mat-error>
+					</mat-form-field>
+					<mat-form-field layout="row">
+						<input flex matInput id="lastNam" formControlName="lastNam" type="text" placeholder="Last Name" required>
+						<mat-error *ngIf="lastNam.invalid && (lastNam.dirty || lastNam.touched)">
+							<span *ngIf="lastNam.errors.required">
+								Last Name is required.
+							</span>
+						</mat-error>
+					</mat-form-field>
+					<mat-form-field layout="row">
+						<input flex matInput id="wallet" formControlName="wallet" type="number" placeholder="Wallet" required>
+						<mat-error *ngIf="wallet.invalid && (wallet.dirty || wallet.touched)">
+							<span *ngIf="wallet.errors.required">
+								Wallet is required.
+							</span>
+							<span *ngIf="wallet.errors.min">
+								Wallet cannot be less than 0.
+							</span>
+						</mat-error>
+					</mat-form-field>
+				</form>
+			</div>
+		</div>
+	</mat-dialog-content>
+	<mat-dialog-actions layout="row" layout-align="center center">
+		<button mat-raised-button color="warn" (click)="closeDialog()">Cancel</button>
+		<button mat-raised-button color="accent" (click)="addParticipant()">Confirm</button>
+	</mat-dialog-actions>
+</div>

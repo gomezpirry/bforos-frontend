@@ -1,0 +1,95 @@
+<div *tdLoading="'create'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'primary'">
+	<h2 mat-dialog-title>Create Asset</h2>
+	<mat-dialog-content>
+		<div layout="column">
+			<div layout="column">
+				<div layout="row" *ngIf="errorMessage" class="alert alert-danger" role="alert">
+					<strong>Error:</strong> {{errorMessage}}
+				</div>
+			</div>
+			<div layout="column">
+				<form layout="column" [formGroup]="myForm">
+					<mat-form-field layout="row">
+						<input flex matInput id="ROId" formControlName="ROId" type="text" placeholder="ID" required>
+						<mat-error *ngIf="ROId.invalid && (ROId.dirty || ROId.touched)">
+							<span *ngIf="ROId.errors.required">
+								ID is required.
+							</span>
+						</mat-error>
+					</mat-form-field>
+					<div layout="column">
+						<div layout="row">
+							<mat-label>Type *</mat-label>
+						</div>
+						<mat-radio-group layout="row" [formControlName]="'typero'" [required]="true">
+							<mat-radio-button *ngFor="let type of objectTypes" [value]="type.value" class="push-left-sm">
+								{{type.name}}
+							</mat-radio-button>
+						</mat-radio-group>
+						<mat-error layout="row" *ngIf="typero.invalid && (typero.dirty || typero.touched)">
+								<span *ngIf="typero.errors.required">
+									<small>Type is required.</small>
+								</span>
+						</mat-error>
+					</div>
+					<mat-form-field layout="row">
+						<input flex matInput id="address" formControlName="address" type="text" placeholder="Address" required>
+						<mat-error *ngIf="address.invalid && (address.dirty || address.touched)">
+							<span *ngIf="address.errors.required">
+								Address is required.
+							</span>
+						</mat-error>
+					</mat-form-field>
+					<mat-form-field layout="row">
+						<input flex matInput id="reward" formControlName="reward" type="number" placeholder="Reward" required>
+						<mat-error *ngIf="reward.invalid && (reward.dirty || reward.touched)">
+							<span *ngIf="reward.errors.required">
+								Reward is required.
+							</span>
+							<span *ngIf="reward.errors.min">
+								Reward cannot be less than 0.
+							</span>
+						</mat-error>
+					</mat-form-field>
+					<mat-form-field layout="row">
+						<input flex matInput id="cost" formControlName="cost" type="number" placeholder="Cost" required>
+						<mat-error *ngIf="cost.invalid && (cost.dirty || cost.touched)">
+							<span *ngIf="cost.errors.required">
+								Cost is required.
+							</span>
+							<span *ngIf="cost.errors.min">
+								Cost cannot be less than 0.
+							</span>
+						</mat-error>
+					</mat-form-field>
+					<mat-form-field layout="row">
+						<input flex matInput id="owner" formControlName="owner" type="email" placeholder="Owner (email)">
+						<mat-error *ngIf="owner.invalid && (owner.dirty || owner.touched)">
+							<!--<span *ngIf="owner.errors.required">-->
+								<!--Owner is required.-->
+							<!--</span>-->
+							<span *ngIf="owner.errors.email">
+								Incorrect email pattern.
+							</span>
+						</mat-error>
+					</mat-form-field>
+					<mat-form-field layout="row">
+						<input flex matInput id="contributor" formControlName="contributor" type="email" placeholder="Contributor (email)">
+						<mat-error *ngIf="contributor.invalid && (contributor.dirty || contributor.touched)">
+							<!--<span *ngIf="contributor.errors.required">-->
+								<!--Contributor is required.-->
+							<!--</span>-->
+							<span *ngIf="contributor.errors.email">
+								Incorrect email pattern.
+							</span>
+						</mat-error>
+					</mat-form-field>
+				</form>
+			</div>
+		</div>
+	</mat-dialog-content>
+	<mat-dialog-actions layout="row" layout-align="center center">
+		<button mat-raised-button color="warn" (click)="closeDialog()">Cancel</button>
+		<button mat-raised-button color="accent" (click)="addAsset()">Confirm</button>
+	</mat-dialog-actions>
+</div>

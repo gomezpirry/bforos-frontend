@@ -15,6 +15,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ClaimService} from './Claim.service';
+import {TdLoadingService} from '@covalent/core';
 // import 'rxjs/add/operator/toPromise';
 
 @Component({
@@ -26,51 +27,28 @@ import {ClaimService} from './Claim.service';
 export class ClaimComponent implements OnInit {
 
 	myForm: FormGroup;
+	errorMessage: String;
+	successMessage: String;
 
-	private allTransactions;
 	private Transaction;
-	private currentId;
-	private errorMessage;
 
 	Ro = new FormControl('', Validators.required);
 	claimer = new FormControl('', Validators.required);
-	transactionId = new FormControl('', Validators.required);
-	timestamp = new FormControl('', Validators.required);
+	// transactionId = new FormControl('', Validators.required);
+	// timestamp = new FormControl('', Validators.required);
 
-	constructor(private serviceClaim: ClaimService, fb: FormBuilder) {
+	constructor(private serviceClaim: ClaimService,
+							private loadingService: TdLoadingService,
+							public fb: FormBuilder) {
 		this.myForm = fb.group({
 			Ro: this.Ro,
 			claimer: this.claimer,
-			transactionId: this.transactionId,
-			timestamp: this.timestamp
+			// transactionId: this.transactionId,
+			// timestamp: this.timestamp
 		});
 	};
 
-	ngOnInit(): void {
-		this.loadAll();
-	}
-
-	loadAll(): Promise<any> {
-		const tempList = [];
-		return this.serviceClaim.getAll()
-			.toPromise()
-			.then((result) => {
-				this.errorMessage = null;
-				result.forEach(transaction => {
-					tempList.push(transaction);
-				});
-				this.allTransactions = tempList;
-			})
-			.catch((error) => {
-				if (error === 'Server error') {
-					this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-				} else if (error === '404 - Not Found') {
-					this.errorMessage = '404 - Could not find API route. Please check your available APIs.'
-				} else {
-					this.errorMessage = error;
-				}
-			});
-	}
+	ngOnInit(): void {	}
 
 	/**
 	 * Event handler for changing the checked state of a checkbox (handles array enumeration values)
@@ -97,145 +75,48 @@ export class ClaimComponent implements OnInit {
 		return this[name].value.indexOf(value) !== -1;
 	}
 
-	addTransaction(form: any): Promise<any> {
-		this.Transaction = {
-			$class: 'org.bforos.Claim',
-			'Ro': this.Ro.value,
-			'claimer': this.claimer.value,
-			'transactionId': this.transactionId.value,
-			'timestamp': this.timestamp.value
-		};
+	submit(): void {
+		this.successMessage = null;
+		if (this.myForm.valid) {
+			this.Transaction = {
+				$class: 'org.bforos.Claim',
+				'Ro': this.Ro.value,
+				'claimer': this.claimer.value,
+				// 'transactionId': this.transactionId.value,
+				// 'timestamp': this.timestamp.value
+			};
 
-		this.myForm.setValue({
-			'Ro': null,
-			'claimer': null,
-			'transactionId': null,
-			'timestamp': null
-		});
-
-		return this.serviceClaim.addTransaction(this.Transaction)
-			.toPromise()
-			.then(() => {
-				this.errorMessage = null;
-				this.myForm.setValue({
-					'Ro': null,
-					'claimer': null,
-					'transactionId': null,
-					'timestamp': null
+			this.registerLoading();
+			this.serviceClaim.addTransaction(this.Transaction).subscribe(
+				(result) => {
+					this.errorMessage = null;
+					this.myForm.reset();
+					this.successMessage = ' Transaction ' + result.transactionId + ' submitted successfully.';
+					this.resolveLoading();
+				},
+				(error) => {
+					if (error === 'Server error') {
+						this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+					} else {
+						this.errorMessage = error;
+					}
+					this.resolveLoading();
 				});
-			})
-			.catch((error) => {
-				if (error === 'Server error') {
-					this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-				} else {
-					this.errorMessage = error;
-				}
+		} else {
+			Object.keys(this.myForm.controls).forEach(field => {
+				const control = this.myForm.get(field);
+				control.markAsTouched({ onlySelf: true });
+				// console.log(field, control.errors);
 			});
+		}
 	}
 
-	updateTransaction(form: any): Promise<any> {
-		this.Transaction = {
-			$class: 'org.bforos.Claim',
-			'Ro': this.Ro.value,
-			'claimer': this.claimer.value,
-			'timestamp': this.timestamp.value
-		};
-
-		return this.serviceClaim.updateTransaction(form.get('transactionId').value, this.Transaction)
-			.toPromise()
-			.then(() => {
-				this.errorMessage = null;
-			})
-			.catch((error) => {
-				if (error === 'Server error') {
-					this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-				}	else if (error === '404 - Not Found') {
-					this.errorMessage = '404 - Could not find API route. Please check your available APIs.'
-				}	else {
-					this.errorMessage = error;
-				}
-			});
+	registerLoading(): void {
+		this.loadingService.register('create');
 	}
 
-	deleteTransaction(): Promise<any> {
-		return this.serviceClaim.deleteTransaction(this.currentId)
-			.toPromise()
-			.then(() => {
-				this.errorMessage = null;
-			})
-			.catch((error) => {
-				if (error === 'Server error') {
-					this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-				}	else if (error === '404 - Not Found') {
-					this.errorMessage = '404 - Could not find API route. Please check your available APIs.'
-				}	else {
-					this.errorMessage = error;
-				}
-			});
+	resolveLoading(): void {
+		this.loadingService.resolve('create');
 	}
-
-	setId(id: any): void {
-		this.currentId = id;
-	}
-
-	getForm(id: any): Promise<any> {
-		return this.serviceClaim.getTransaction(id)
-			.toPromise()
-			.then((result) => {
-				this.errorMessage = null;
-				const formObject = {
-					'Ro': null,
-					'claimer': null,
-					'transactionId': null,
-					'timestamp': null
-				};
-
-				if (result.Ro) {
-					formObject.Ro = result.Ro;
-				} else {
-					formObject.Ro = null;
-				}
-
-				if (result.claimer) {
-					formObject.claimer = result.claimer;
-				} else {
-					formObject.claimer = null;
-				}
-
-				if (result.transactionId) {
-					formObject.transactionId = result.transactionId;
-				} else {
-					formObject.transactionId = null;
-				}
-
-				if (result.timestamp) {
-					formObject.timestamp = result.timestamp;
-				} else {
-					formObject.timestamp = null;
-				}
-
-				this.myForm.setValue(formObject);
-
-			})
-			.catch((error) => {
-				if (error === 'Server error') {
-					this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-				}	else if (error === '404 - Not Found') {
-					this.errorMessage = '404 - Could not find API route. Please check your available APIs.'
-				}	else {
-					this.errorMessage = error;
-				}
-			});
-	}
-
-	resetForm(): void {
-		this.myForm.setValue({
-			'Ro': null,
-			'claimer': null,
-			'transactionId': null,
-			'timestamp': null
-		});
-	}
-
 }
 
