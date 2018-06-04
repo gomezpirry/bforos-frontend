@@ -70,7 +70,7 @@ export class ResearchOJHistoryComponent implements OnInit {
 				// 'transactionId': this.transactionId.value,
 				// 'timestamp': this.timestamp.value
 			};
-
+			this.history = [];
 			this.registerLoading();
 			this.serviceResearchOJHistory.requestResearchOJHistory(this.Transaction).subscribe(
 				(data) => {

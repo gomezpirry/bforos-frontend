@@ -43,7 +43,7 @@
 			</div>
 		</mat-card-actions>
 	</mat-card>
-	<mat-card *ngIf="currentROId">
+	<mat-card *ngIf="currentROId && history?.length > 0">
 		<mat-card-title>
 			History of {{currentROId}}
 		</mat-card-title>
