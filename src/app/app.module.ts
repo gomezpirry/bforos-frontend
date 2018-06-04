@@ -36,6 +36,8 @@ import { DeleteResearchOJDialogComponent } from './ResearchOJ/delete-research-oj
 import { CreateResearcherDialogComponent } from './Researcher/create-researcher-dialog/create-researcher-dialog.component';
 import { UpdateResearcherDialogComponent } from './Researcher/update-researcher-dialog/update-researcher-dialog.component';
 import { DeleteResearcherDialogComponent } from './Researcher/delete-researcher-dialog/delete-researcher-dialog.component';
+import { ResearchOJHistoryComponent } from './ResearchOJHistory/research-oj-history.component';
+import {MglTimelineModule} from 'angular-mgl-timeline';
 
 // import { TransactionComponent } from './Transaction/Transaction.component'
 
@@ -55,7 +57,8 @@ import { DeleteResearcherDialogComponent } from './Researcher/delete-researcher-
 		DeleteResearchOJDialogComponent,
 		CreateResearcherDialogComponent,
 		UpdateResearcherDialogComponent,
-		DeleteResearcherDialogComponent
+		DeleteResearcherDialogComponent,
+		ResearchOJHistoryComponent
 	],
 	entryComponents: [
 		CreateResearchOJDialogComponent,
@@ -72,7 +75,8 @@ import { DeleteResearcherDialogComponent } from './Researcher/delete-researcher-
 		ReactiveFormsModule,
 		HttpClientModule,
 		AppRoutingModule,
-		AngularMaterialModule
+		AngularMaterialModule,
+		MglTimelineModule
 	],
 	providers: [
 		DataService

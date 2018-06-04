@@ -62,6 +62,10 @@ export class AppComponent implements AfterViewInit{
 				{
 					displayName: 'Enrich',
 					name: '/Enrich'
+				},
+				{
+					displayName: 'Research Object History',
+					name: '/ResearchOJHistory'
 				}
 			]
 		}

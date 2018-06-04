@@ -169,7 +169,7 @@ export class UpdateResearchOJDialogComponent implements OnInit {
 			if (this.owner.value && this.owner.value.length === 0) {
 				this.owner.setValue(null);
 			}
-			if (this.owner.value && this.contributor.value.length === 0) {
+			if (this.contributor.value && this.contributor.value.length === 0) {
 				this.contributor.setValue(null);
 			}
 

@@ -19,13 +19,13 @@ export class ResearchOJ extends Asset {
 	reward: number;
 	cost: number;
 	owner: Researcher;
-	contributor: Researcher;
+	contributor: Researcher[];
 }
 
 export class Researcher extends Participant {
 	email: string;
 	firstName: string;
-	lastNam: string;
+	lastName: string;
 	wallet: number;
 }
 
@@ -54,6 +54,14 @@ export class Collect extends Transaction {
 export class Enrich extends Transaction {
 	Ro: ResearchOJ;
 	contributor: Researcher;
+}
+
+export class ResearchOJHistory extends Transaction {
+	ROId: string;
+}
+
+export class ResearchOJHistoryResults extends Event {
+	results: string[];
 }
 
 // }

@@ -15,6 +15,7 @@
 
 @import '~@angular/material/theming';
 @import '~@covalent/core/theming/all-theme';
+@import '~angular-mgl-timeline/theme';
 
 // Define a custom typography config that overrides the font-family
 // or any typography level.
@@ -34,3 +35,4 @@ $theme: mat-light-theme($primary, $accent, $warn);
 
 @include angular-material-theme($theme);
 @include covalent-theme($theme); // $typography is an **optional** argument for the covalent-theme
+@include mgl-timeline-theme($theme);

@@ -19,7 +19,7 @@ export class CreateResearcherDialogComponent implements OnInit {
 
 	email = new FormControl(null, [ Validators.required, Validators.email ]);
 	firstName = new FormControl(null, Validators.required);
-	lastNam = new FormControl(null, Validators.required);
+	lastName = new FormControl(null, Validators.required);
 	wallet = new FormControl(null, [ Validators.required, Validators.min(0) ]);
 
 	constructor(private serviceResearcher: ResearcherService,
@@ -29,7 +29,7 @@ export class CreateResearcherDialogComponent implements OnInit {
 		this.myForm = fb.group({
 			email: this.email,
 			firstName: this.firstName,
-			lastNam: this.lastNam,
+			lastName: this.lastName,
 			wallet: this.wallet
 		});
 	};
@@ -43,7 +43,7 @@ export class CreateResearcherDialogComponent implements OnInit {
 				$class: 'org.bforos.Researcher',
 				'email': this.email.value,
 				'firstName': this.firstName.value,
-				'lastNam': this.lastNam.value,
+				'lastName': this.lastName.value,
 				'wallet': this.wallet.value
 			};
 

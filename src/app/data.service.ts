@@ -13,7 +13,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams, HttpResponse} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
@@ -33,7 +33,7 @@ export class DataService<Type> {
 
 	public getAll(ns: string): Observable<Type[]> {
 		console.log('GetAll ' + ns + ' to ' + this.actionUrl + ns);
-		return this.httpClient.get(`${this.actionUrl}${ns}`, { observe: 'response' })
+		return this.httpClient.get(`${this.actionUrl}${ns}`, { observe: 'response', headers: this.headers })
 			.pipe(
 				map(this.extractData),
 				catchError(this.handleError)
@@ -84,10 +84,21 @@ export class DataService<Type> {
 			);
 	}
 
+	public history(ns: string, id: string): Observable<any[]> {
+		console.log('Query ', ns);
+		const params = (new HttpParams()).append('transactionId', id);
+
+		return this.httpClient.get(this.actionUrl + 'queries/' + ns, { observe: 'response', headers: this.headers, params: params })
+			.pipe(
+				map(this.extractData),
+				catchError(this.handleError)
+			);
+	}
+
 	private handleError(error: any): Observable<string> {
 		// In a real world app, we might use a remote logging infrastructure
 		// We'd also dig deeper into the error to get a better message
-		let errMsg = (error.message) ? error.message :
+		const errMsg = (error.message) ? error.message :
 			error.status ? `${error.status} - ${error.statusText}` : 'Server error';
 		console.error(errMsg); // log to console instead
 		return throwError(errMsg);

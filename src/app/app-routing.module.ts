@@ -22,6 +22,7 @@ import {InstitutionComponent} from './Institution/Institution.component';
 import {ClaimComponent} from './Claim/Claim.component';
 import {CollectComponent} from './Collect/Collect.component';
 import {EnrichComponent} from './Enrich/Enrich.component';
+import {ResearchOJHistoryComponent} from './ResearchOJHistory/research-oj-history.component';
 
 const routes: Routes = [
 	// { path: 'transaction', component: TransactionComponent },
@@ -32,6 +33,7 @@ const routes: Routes = [
 	{path: 'Claim', component: ClaimComponent},
 	{path: 'Collect', component: CollectComponent},
 	{path: 'Enrich', component: EnrichComponent},
+	{path: 'ResearchOJHistory', component: ResearchOJHistoryComponent},
 	{path: '**', redirectTo: ''}
 ];
 

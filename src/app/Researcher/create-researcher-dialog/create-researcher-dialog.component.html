@@ -29,9 +29,9 @@
 						</mat-error>
 					</mat-form-field>
 					<mat-form-field layout="row">
-						<input flex matInput id="lastNam" formControlName="lastNam" type="text" placeholder="Last Name" required>
-						<mat-error *ngIf="lastNam.invalid && (lastNam.dirty || lastNam.touched)">
-							<span *ngIf="lastNam.errors.required">
+						<input flex matInput id="lastName" formControlName="lastName" type="text" placeholder="Last Name" required>
+						<mat-error *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)">
+							<span *ngIf="lastName.errors.required">
 								Last Name is required.
 							</span>
 						</mat-error>
