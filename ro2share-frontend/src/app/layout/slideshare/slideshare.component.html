@@ -1,0 +1,26 @@
+<h2>My Presentations</h2>
+<hr />
+<div class="slideshare-search">
+    <input type="text" class="form-control" placeholder="Slideshare username" [(ngModel)]="slideshareUsername">
+    <input type="password" class="form-control" placeholder="Slideshare password" [(ngModel)]="slidesharePassword">
+    <span class="input-group-btn"></span>
+    <button class="btn btn-primary" type="button" (click)="search(slideshareUsername, slidesharePassword)">Search&nbsp;<i class="fa fa-search"></i></button>
+</div>
+
+<hr [hidden]="slidesharePresentations?.length > 0"/>
+<p><ngb-progressbar type="info" [value]="100" [striped]="true" [animated]="true" [hidden]="slidesharePresentations?.length > 0 || !searching">Loading your Slideshare presentations</ngb-progressbar></p>
+<div class="row">
+    <div class="col-10" *ngFor="let presentation of slidesharePresentations">
+        <div class="card mb-3">
+            <div  class="card-header card-default">
+                {{presentation.title}}&nbsp;<button class="btn btn-sm btn-primary" (click)="claim(presentation)" [hidden]="presentation.claimed">Claim <span class="fa fa-plus-circle"></span></button>
+                <a class="btn btn-sm btn-success" [hidden]="!presentation.claimed">Claimed <span class="fa fa-flag"></span></a>
+            </div>
+            <div  class="card-block">
+              <small class="text-muted">{{presentation.url}}</small>
+              <p>{{presentation.description}}</p>
+              <p><small class="text-muted">{{presentation.language}}</small><p>
+            </div>
+        </div> 
+    </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card mb-3">
+            <button class="btn btn-primary" (click)="open(content, disco, false)">Create a new DiSCO</button>
+            <hr />
+            <p><ngb-progressbar type="info" [value]="100" [striped]="true" [animated]="true" [hidden]="discos?.length > 0 || !searching">Loading DiSCOs</ngb-progressbar></p>
+            <div class="col-10" *ngFor="let disco of discos">
+                <div class="card mb-3">
+                    <div  class="card-header card-default">
+                        {{disco.title}}&nbsp;
+                        <!--<a class="btn btn-sm btn-primary" target="_blank" [href]="downloadUrl + disco.uri">&nbsp;Download <span class="fa fa-download"></span></a>-->
+                        <a class="btn btn-sm btn-primary pull-right" target="_blank" (click)="open(content, disco, true)">&nbsp;Edit <span class="fa fa-edit"></span></a>
+                    </div>
+                    <div  class="card-block">
+                      <small>{{disco.titles}}</small>
+                      <!--<small class="text-muted">{{disco.uri}}</small>-->
+                    </div>
+                </div> 
+            </div>
+            <ng-template #content let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title" [hidden]="edit">New DiSCO</h4>
+                    <h4 class="modal-title" [hidden]="!edit">Edit DiSCO</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="c('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                <fieldset class="form-group">
+                    <label>DiSCO Description</label>
+                    <input class="form-control" [(ngModel)]="disco.title" placeholder="Enter name">
+                </fieldset>
+                <ss-multiselect-dropdown [options]="myOptions" [settings]="mySettings" [(ngModel)]="disco.Robjs" (ngModelChange)="onChange($event)"></ss-multiselect-dropdown>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancel</button>
+                <button type="button" class="btn btn-secondary" (click)="d(disco)">Save</button>
+                </div>
+            </ng-template>
+        </div>
+    </div>

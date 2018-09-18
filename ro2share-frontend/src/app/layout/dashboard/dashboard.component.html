@@ -1,0 +1,40 @@
+<h2>SHARE Search Results for your name</h2>
+<hr>
+<p><ngb-progressbar type="info" [value]="100" [striped]="true" [animated]="true" [hidden]="shareResults?.length > 0 || !searching">Loading SHARE search results</ngb-progressbar></p>
+<div class="row">
+    <div class="col-10" *ngFor="let result of shareResults">
+        <div class="card mb-3">
+            <div  class="card-header card-default">
+                {{result.title}}
+                <button class="btn btn-sm btn-primary" (click)="open(content, result)" [hidden]="result.claimed">Claim <span class="fa fa-plus-circle"></span></button>
+                <a class="btn btn-sm btn-success" [hidden]="!result.claimed">Claimed <span class="fa fa-flag"></span></a>
+            </div>
+            <div  class="card-block">
+              <small class="text-muted">{{result.type}}</small>
+              <p *ngIf="(result.publishers?.length > 0)">Publisher: {{result.publishers}}</p>
+              <p [hidden]="!(result.contributors?.length > 0)">Contributors: <span *ngFor="let contributor of result.contributors">{{contributor}}, </span></p>
+              <p [hidden]="!result.description">Description: {{result.description}}</p>
+              <p *ngFor="let link of result.identifiers"><a target="_blank" href="{{link}}">{{link}}</a></p>
+            </div>
+        </div> 
+    </div>
+</div>
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title" [hidden]="edit">Please indicate which contibutor are you</h4>
+        <button type="button" class="close" aria-label="Close" (click)="c('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+    <div *ngFor="let contributor of selectedResult.contributors" class="radio">
+        <label>
+            <input type="radio" name="optionsRadios" id="optionsRadios1" value="{{contributor}}" [(ngModel)]="selectedContributor" checked=""> {{contributor}}
+        </label>
+    </div>
+    </div>
+    <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancel</button>
+    <button type="button" class="btn btn-secondary" (click)="d(selectedResult)">Submit</button>
+    </div>
+</ng-template>

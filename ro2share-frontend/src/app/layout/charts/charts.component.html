@@ -1,0 +1,15 @@
+<h2>My Research Objects</h2>
+<hr>
+<div class="row">
+    <div class="col-10" *ngFor="let ro of ros">
+        <div class="card mb-3">
+            <div  class="card-header card-default">
+                {{ro.ROId}}
+                <a class="btn btn-sm btn-info">{{ro.typero}}</a>
+            </div>
+            <div  class="card-block">
+              <small class="text-muted">{{ro.uri}}</small>
+            </div>
+        </div> 
+    </div>
+</div>
